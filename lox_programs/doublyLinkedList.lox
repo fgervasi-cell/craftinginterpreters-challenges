@@ -1,0 +1,70 @@
+class Node 
+{
+    init(value, prev, next) 
+    {
+        this.value = value;
+        this.prev = prev;
+        this.next = next;
+    }
+}
+
+class LinkedList 
+{
+    init() 
+    {
+        this.head = Node(nil, nil, nil);
+        this.tail = Node(nil, nil, nil);
+        this.length = 0;
+        this.head.prev = this.tail;
+        this.tail.next = this.head;
+    }
+
+    insert(value)
+    {
+        var node = Node(value, this.head.prev, this.head);
+        this.head.prev.next = node;
+        this.head.prev = node;
+        // is this.length++ not possible?: no its not
+        this.length = this.length + 1;
+    }
+
+    delete(index)
+    {
+        var delete = this.tail.next;
+        for (var i = 0; i < index; i = i + 1)
+        {
+            delete = delete.next;
+        }
+        delete.next.prev = delete.prev;
+        delete.prev.next = delete.next;
+        // is this.length-- not possible?: no its not
+        this.length = this.length - 1;
+    }
+
+    // you cannot name this print because it is already a built in function
+    out()
+    {
+        // the built in print function always starts a new line
+        print "[";
+        var temp = this.tail.next;
+        while (temp.next != nil)
+        {
+            // not possible because no automatic type conversion
+            // print temp.value + ",";
+            // how to explicitly convert a type?
+            print temp.value;
+            temp = temp.next;
+        }
+        print "]";
+    }
+}
+
+var list = LinkedList();
+list.insert(10);
+list.insert(20);
+list.insert(-20);
+print list.length;
+list.out();
+list.delete(0);
+print list.length;
+list.out();
