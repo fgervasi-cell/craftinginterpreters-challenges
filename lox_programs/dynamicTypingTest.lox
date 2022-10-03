@@ -1,0 +1,8 @@
+var iAmAString = "Hello";
+var iAmANumber = 10;
+// This does not work - no automatic type conversion
+// print iAmAString + iAmANumber;
+
+iAmANumber = "10";
+// but now it will
+print iAmAString + iAmANumber;

@@ -41,7 +41,7 @@ class LinkedList
         this.length = this.length - 1;
     }
 
-    // you cannot name this print because it is already a built in function
+    // you cannot name this print because it is already a built in function?
     out()
     {
         // the built in print function always starts a new line

@@ -1,0 +1,110 @@
+print
+// line breaks do not matter
+"Hello";
+{
+    print "World";
+    var x = 10;
+}
+// variable x cannot be accessed here because it is defined in another scope
+// print x;
+var x = 10; // like this it is possible
+print x;
+var y;
+{
+    y = 20; // y can be accessed here because it is defined in an outer scope
+}
+y = 30;
+print y;
+
+// expirementing with functions
+// you cannot name functions after reserved keywords: fun fun()
+fun foo()
+{
+    return 10;
+}
+var fooVar = foo;
+print fooVar; // prints the type
+fooVar = foo();
+print fooVar; // prints the value returned by foo() - 10
+fun bar()
+{
+    // some calculation...
+}
+print bar(); // prints *nil* because functions without return stmt implicitly return *nil*
+
+// expirementing with classes
+class Clazz
+{
+    someFunction()
+    {
+        return "someFunction";       
+    }
+}
+print Clazz; // just prints the name of the class "Clazz"
+print Clazz(); // prints "Clazz instance"
+// print Clazz.someFunction(); - produces error because "only instances have properties"
+var barVar = Clazz;
+print barVar(); // same like Clazz()!
+class Ssalc
+{
+    init(param1, param2, param3)
+    {
+        this.param1 = param1;
+        this.param2 = param2;
+        this.param3 = param3;
+    }
+
+    getParam1()
+    {
+        return this.param1;
+    }
+
+    getParam3()
+    {
+        return this.param3;
+    }
+
+    getSelf()
+    {
+        print "I returned myself";
+        return Ssalc;
+    }
+}
+
+var barVar = Ssalc;
+print barVar("param1", "param2", Clazz).getParam1();
+print barVar("param1", "param2", Clazz).getParam3()().someFunction(); // ??? - this works
+print barVar("oneParam", "anotherParam", Clazz).getSelf()("1", "2", "3").getSelf()(1, 2, Clazz).getParam3()().someFunction(); // prints "someFuntion"!!!
+
+// recursion? -> YES!
+fun fac(n)
+{
+    if (n == 1)
+    {
+        return 1;
+    }
+    else
+    {
+        return fac(n - 1) * n;
+    }
+}
+print fac(170); // returns a huge number
+print fac(171); // returns "Infinity"
+print fac(459); // still "Infinity"
+// print fac(460); -> produces error
+
+print
+"
+    This is interesting
+"
+; // You can format string like this too! -> see output!
+
+// Block comments working?
+/*
+    This is a block
+    comment over 
+    several lines
+*/
+var decl = 10; // variable declaration after block comment
+
+

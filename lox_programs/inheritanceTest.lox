@@ -1,0 +1,65 @@
+class Vehicle
+{
+    init(numberOfWheels, maxSpeed, numberOfPassengers)
+    {
+        this.numberOfWheels = numberOfWheels;
+        this.maxSpeed = maxSpeed;
+        this.numberOfPassengers = numberOfPassengers;
+    }
+
+    drive()
+    {
+        print "The vehicle drives";
+    }
+}
+
+class Car < Vehicle
+{
+    init(numberOfWheels, maxSpeed, numberOfPassengers)
+    {
+        super.init(numberOfWheels, maxSpeed, numberOfPassengers);
+    }
+
+    // no inner classes possible?
+    // class Engine
+    // {
+    //    start()
+    //    {
+    //        var startTime = 0;
+    //
+            // ?
+    //        getStartTime()
+    //        {
+    //            return startTime;
+    //        }
+    //    }
+    //}
+
+    // what about this?
+    // print "The car drives"
+
+    drive()
+    {
+        print "The car drives";
+    }
+
+    // overloading?
+    drive(speed)
+    {
+        print "The car drives with a speed of " + speed;
+    }
+}
+
+class Bus < Car
+{
+
+}
+
+var vehicle = Vehicle(2, 100, 2);
+vehicle.drive();
+
+var car = Car(2, 200, 4);
+car.drive("150");
+
+var bus = Bus(4, 80, 50);
+bus.drive("80");

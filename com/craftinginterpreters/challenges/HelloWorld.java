@@ -1,4 +1,4 @@
-package craftinginterpreters;
+package com.craftinginterpreters.challenges;
 
 public class HelloWorld
 {
