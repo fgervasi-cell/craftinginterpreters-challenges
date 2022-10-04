@@ -149,6 +149,14 @@ class Scanner
     {
         while (!isAtEnd())
         {
+            // There is a nested block comment.
+            if (peek() == '/' && peekNext() == '*')
+            {
+                advance();
+                advance();
+                blockComment();
+            }
+                
             if (peek() == '*' && peekNext() == '/')
             {
                 // The block ends and we need to consume "*" and "/".
@@ -156,7 +164,11 @@ class Scanner
                 advance();
                 return;
             }
-            advance();
+
+            if (!isAtEnd() && advance() == '\n')
+            {
+                line++;
+            }
         }
         Lox.error(line, "Block comment not terminated.");
     }

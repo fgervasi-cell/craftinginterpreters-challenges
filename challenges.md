@@ -64,9 +64,15 @@ Missing features for "real" programs:
 
 ### Challenge 4.1
 
+// TODO
+
 ### Challenge 4.2
 
+// TODO
+
 ### Challenge 4.3
+
+// TODO
 
 ### Challenge 4.4
 
@@ -110,3 +116,64 @@ case '/':
 ```
 
 Solution with nesting:
+
+```java
+private void blockComment() 
+{
+    while (!isAtEnd())
+    {
+        // There is a nested block comment.
+        if (peek() == '/' && peekNext() == '*')
+        {
+            advance();
+            advance();
+            blockComment();
+        }
+                
+        if (peek() == '*' && peekNext() == '/')
+        {
+            // The block ends and we need to consume "*" and "/".
+            advance();
+            advance();
+            return;
+        }
+
+        if (!isAtEnd() && advance() == '\n')
+        {
+            line++;
+        }
+    }
+    Lox.error(line, "Block comment not terminated.");
+}
+```
+
+The problem with this solution is that things like
+
+```lox
+/* 
+    This is a comment
+    /*
+        This is a nested comment
+    */
+*/
+```
+
+work and
+
+```lox
+/* 
+    This is a comment
+    /*
+        This is a nested comment
+    
+*/
+```
+
+is also regognized as an error but in the below example the tokens *STAR* and *SLASH* are scanned :(.
+
+```lox
+/* 
+    This is a comment
+    */
+*/
+```

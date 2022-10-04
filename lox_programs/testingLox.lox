@@ -104,7 +104,8 @@ print
     This is a block
     comment over 
     several lines
-*/
+
+
 var decl = 10; // variable declaration after block comment
 
 
