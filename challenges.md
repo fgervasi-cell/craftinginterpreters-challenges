@@ -64,15 +64,40 @@ Missing features for "real" programs:
 
 ### Challenge 4.1
 
-// TODO
+In regular grammars it is allowed only to have one non-terminal on the left side of a production rule.
+On the right only one terminal and a maximum of one non-terminal symbol can be used. E.g. A --> aB or A --> a. The grammars of Python and Haskell break with this rule. In fact a lot of programming languages count on context-free (Type 2) grammars where the right side of a production rule can contain an arbitrary sequence of terminals and non-terminals. Such grammar can be described by the Backus-Naur-Form (BNF). Context-free grammars are used because they are more powerful than regular (Type 3) languages/grammars. E.g. with a type 3 grammar you cannot even specify well formed bracket expressions. Type 1 grammars on the other hand are too complex. Instead the context is inferred at a leater state in the parser.  
+[https://qr.ae/pvegwT](https://qr.ae/pvegwT)
 
 ### Challenge 4.2
 
-// TODO
+Spaces in CoffeeScript:
+
+- To format the content of block strings delimited by *"""* or *'''*
+- Multi line strings are joined by a single space
+- Objects can be defined in YAML syntax which also recognizes spaces
+- For distinguishing operators from XML tags in JSX
+- Using Markdown syntax in *Literate CoffeeScript*
+
+[https://coffeescript.org/](https://coffeescript.org/)
+
+Spaces in Ruby:
+
+- In line oriented string literals there must be no space between *<<* and the terminator
+- In case of self assignment the syntax *expr op= expr* does not allow whitespace between *op* and *=*
+- For creating arrays of strings with %w expressions
+
+[https://ruby-doc.org/docs/ruby-doc-bundle/Manual/man-1.4/syntax.html](https://ruby-doc.org/docs/ruby-doc-bundle/Manual/man-1.4/syntax.html)
+
+Spaces in the C preprocessor:  
+The preprocessor in some cases inserts whitespace elements in its token stream to eliminate ambiguity.
+
+[https://stackoverflow.com/questions/37796947/spaces-inserted-by-the-c-preprocessor](https://stackoverflow.com/questions/37796947/spaces-inserted-by-the-c-preprocessor)
 
 ### Challenge 4.3
 
-// TODO
+- In order to do stuff like in challenge 4.2
+- If the parser needs to know about whitespaces
+- If whitespaces change the semantic of a program
 
 ### Challenge 4.4
 
@@ -177,3 +202,129 @@ is also regognized as an error but in the below example the tokens *STAR* and *S
     */
 */
 ```
+
+## Chapter 5: Representing Code
+
+### Challenge 5.1
+
+Given grammar:
+
+```ebnf
+expr -> expr ( "(" ( expr ( "," expr )* )? ")" | "." IDENTIFIER )+
+      | IDENTIFIER
+      | NUMBER
+```
+
+This grammar produces stuff like *IDENTIFIER.IDENTIFIER*, *NUMBER.IDENTIFIER.IDENTIFIER*, *IDENTIFIER(IDENTIFIER, NUMBER)* or IDENTIFIER(). Without the syntactic sugar I think the grammar should look something like this:
+
+```ebnf
+expr -> expr call;
+expr -> IDENTIFIER;
+expr -> NUMBER;
+call -> "." IDENTIFIER;
+call -> "." IDENTIFIER call;
+call -> "(" ")";
+call -> "(" expr ")";
+call -> "(" expr argument ")";
+argument -> "," expr;
+argument -> "," expr argument;
+```
+
+The kind of expressions described by that might be class instantiation, function calls or accessing variables of a class instance.
+
+### Challenge 5.2
+
+I do not know any functional language well enough to devise such a pattern I think...
+
+### Challenge 5.3
+
+See *com.craftinginterpreters.lox.RpnRpinter* class. Question that came to mind was how to parse unary operators in RPN. The answer I found stated that you just do not: [https://stackoverflow.com/questions/64867998/how-do-unary-operators-get-parsed-using-rpn](https://stackoverflow.com/questions/64867998/how-do-unary-operators-get-parsed-using-rpn).
+
+## Chapter 6: Parsing Expressions
+
+### Challenge 6.1
+
+Comma operator has lowest precedence. Change grammar accordingly:
+
+```ebnf
+expression  -> comma ;
+comma       -> ternary ( "," comma )* ;
+ternary     -> equality "?" equality ":" ternary ;
+equality    -> comparison ( ( "==" | "!=" ) comparison )* ;
+comparison  -> term ( ( ">=" | ">" | "<" | "<=" ) term )* ; 
+term        -> factor ( ( "+" | "-" ) factor )* ;
+factor      -> unary ( ("/" | "*" ) unary )* ;
+unary       -> ( "!" | "-" ) unary | primary ;
+primary     -> NUMBER | STRING | "true" | "false" | "nil" | "(" expression ")" ;
+```
+
+In Java:
+
+```java
+private Expr comma()
+{
+    Expr expr = ternary();
+    if (match(COMMA))
+    {
+        List<Expr> exprs = new ArrayList<>();
+        exprs.add(expr);
+        exprs.add(comma());
+        while (match(COMMA))
+        {
+            exprs.add(comma());
+        }
+        return new Expr.Comma(exprs);
+    }
+
+    return expr;
+}
+```
+
+Comma operator allows things like
+
+```c
+int a = 2, b = 3; // Not the comma operator!
+int i = (a = a + 2, b + 1); // a will be incremented by 2 and i will have the value b + 1!
+```
+
+Infos:  
+[https://en.cppreference.com/w/c/language/operator_precedence](https://en.cppreference.com/w/c/language/operator_precedence)  
+[https://en.wikipedia.org/wiki/Comma_operator](https://en.wikipedia.org/wiki/Comma_operator)
+
+### Challenge 6.2
+
+Wanted: 4 == 5 ? expression : expression;  
+The expression between the `?` and `:` is treated like a grouped expression. The whole expression is right-associative.
+
+Add the ternary operator to the grammar:
+
+```ebnf
+expression  -> ternary ;
+ternary     -> equality "?" equality ":" ternary ;
+equality    -> comparison ( ( "==" | "!=" ) comparison )* ;
+comparison  -> term ( ( ">=" | ">" | "<" | "<=" ) term )* ; 
+term        -> factor ( ( "+" | "-" ) factor )* ;
+factor      -> unary ( ("/" | "*" ) unary )* ;
+unary       -> ( "!" | "-" ) unary | primary ;
+primary     -> NUMBER | STRING | "true" | "false" | "nil" | "(" expression ")" ;
+```
+
+Program it into the parser:
+
+```java
+private Expr ternary()
+{
+    Expr expr = equality();
+    if (match(QUESTION_MARK))
+    {
+        Expr inner = equality();
+        consume(COLON, "Expected ':' for ternary operator.");
+        Expr right = ternary();
+        expr = new Expr.Ternary(expr, inner, right);
+    }
+
+    return expr;
+}
+```
+
+### Challenge 6.3

@@ -6,6 +6,28 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Launch RpnPrinter",
+            "request": "launch",
+            "mainClass": "com.craftinginterpreters.lox.RpnPrinter",
+            "projectName": "lox"
+        },
+        {
+            "type": "java",
+            "name": "Launch AstPrinter",
+            "request": "launch",
+            "mainClass": "com.craftinginterpreters.lox.AstPrinter",
+            "projectName": "lox"
+        },
+        {
+            "type": "java",
+            "name": "Launch GenerateAst",
+            "request": "launch",
+            "mainClass": "com.craftinginterpreters.tool.GenerateAst",
+            "projectName": "lox",
+            "args": "${command:SpecifyProgramArgs}"
+        },
+        {
+            "type": "java",
             "name": "Launch Current File",
             "request": "launch",
             "mainClass": "${file}"
