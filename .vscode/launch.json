@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Launch HelloWorld",
+            "request": "launch",
+            "mainClass": "HelloWorld",
+            "projectName": "craftinginterpreters_challenges_309d2f55"
+        },
+        {
+            "type": "java",
             "name": "Launch RpnPrinter",
             "request": "launch",
             "mainClass": "com.craftinginterpreters.lox.RpnPrinter",

@@ -16,16 +16,80 @@ public class Parser
         this.tokens = tokens;
     }
 
-    Expr parse()
+    List<Stmt> parse()
+    {
+        List<Stmt> statements = new ArrayList<>();
+        while (!isAtEnd())
+        {
+            statements.add(declaration());
+        }
+
+        return statements;
+    }
+
+    private Stmt declaration()
     {
         try 
         {
-            return expression();
+            if (match(VAR))
+                return varDeclaration();
+            return statement();
         }
-        catch(ParseError error)
+        catch (ParseError error)
         {
+            synchronize();
             return null;
         }
+    }
+
+    private Stmt varDeclaration()
+    {
+        Token name = consume(IDENTIFIER, "Expect variable name.");
+
+        Expr initializer = null;
+        if (match(EQUAL))
+        {
+            initializer = expression();
+        }
+        consume(SEMICOLON, "Expected ';' after variable declaration.");
+
+        return new Stmt.Var(name, initializer);
+    }
+
+    private Stmt statement()
+    {
+        if (match(PRINT))
+            return printStatement();
+        if (match(LEFT_BRACE))
+            return new Stmt.Block(block());
+        
+        return expressionStatement();
+    }
+
+    private Stmt printStatement()
+    {
+        Expr value = expression();
+        consume(SEMICOLON, "Expect ';' after value.");
+        return new Stmt.Print(value);
+    }
+
+    private Stmt expressionStatement()
+    {
+        Expr expr = expression();
+        consume(SEMICOLON, "Expect ';' after expression.");
+        return new Stmt.Expression(expr);
+    }
+
+    private List<Stmt> block()
+    {
+        List<Stmt> statements = new ArrayList<>();
+        while(!check(RIGHT_BRACE) && !isAtEnd())
+        {
+            statements.add(declaration());
+        }
+
+        consume(RIGHT_BRACE, "Expect '}' after block.");
+        return statements;
     }
 
     private Expr expression()
@@ -35,7 +99,7 @@ public class Parser
 
     private Expr comma()
     {
-        Expr expr = ternary();
+        Expr expr = assignment();
         if (match(COMMA))
         {
             List<Expr> exprs = new ArrayList<>();
@@ -46,6 +110,27 @@ public class Parser
                 exprs.add(comma());
             }
             return new Expr.Comma(exprs);
+        }
+
+        return expr;
+    }
+
+    private Expr assignment()
+    {
+        Expr expr = ternary();
+
+        if (match(EQUAL))
+        {
+            Token equals = previous();
+            Expr value = assignment();
+
+            if (expr instanceof Expr.Variable)
+            {
+                Token name = ((Expr.Variable)expr).name;
+                return new Expr.Assign(name, value);
+            }
+
+            error(equals, "Invalid assignment target.");
         }
 
         return expr;
@@ -67,6 +152,13 @@ public class Parser
 
     private Expr equality() 
     {
+        if (match(BANG_EQUAL, EQUAL_EQUAL))
+        {
+            String error = "'==' and '!=' are binary operators and cannot appear" +
+                            " at the beginnig of an expression.";
+            error(peek(), error);
+        }
+
         Expr expr = comparison();
         while (match(BANG_EQUAL, EQUAL_EQUAL))
         {
@@ -80,6 +172,13 @@ public class Parser
 
     private Expr comparison() 
     {
+        if (match(LESS, LESS_EQUAL, GREATER, GREATER_EQUAL))
+        {
+            String error = "'<', '<=', '>' and '>=' are binary operators and cannot appear" +
+                            " at the beginnig of an expression.";
+            error(peek(), error);
+        }
+
         Expr expr = term();
         while (match(LESS, LESS_EQUAL, GREATER, GREATER_EQUAL))
         {
@@ -93,6 +192,13 @@ public class Parser
 
     private Expr term() 
     {
+        if (match(PLUS, MINUS))
+        {
+            String error = "'+' and '-' are binary operators and connot appear"
+                            + " at the beginning of an expression.";
+            error(peek(), error);
+        }
+
         Expr expr = factor();
         while (match(PLUS, MINUS))
         {
@@ -106,6 +212,13 @@ public class Parser
 
     private Expr factor() 
     {
+        if (match(SLASH, STAR))
+        {
+            String error = "'/' and '*' are binary operators and cannot appear at the beginning"
+                            + " of an expression";
+            error(peek(), error);
+        }
+
         Expr expr = unary();
         while (match(SLASH, STAR))
         {
@@ -119,6 +232,11 @@ public class Parser
 
     private Expr unary() 
     {
+        if (match(PLUS))
+        {
+            error(peek(), "Unary '+' expressions are not supported.");
+        }
+
         if (match(BANG, MINUS))
         {
             Token operator = previous();
@@ -139,7 +257,8 @@ public class Parser
             return new Expr.Literal(null);
         if (match(STRING, NUMBER))
             return new Expr.Literal(previous().literal);
-
+        if (match(IDENTIFIER))
+            return new Expr.Variable(previous());
 
         if (match(LEFT_PAREN))
         {

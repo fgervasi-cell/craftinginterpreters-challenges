@@ -328,3 +328,75 @@ private Expr ternary()
 ```
 
 ### Challenge 6.3
+
+Add error productions to grammar:
+
+```ebnf
+expression  -> comma ;
+comma       -> ternary ( "," comma )* ;
+ternary     -> equality "?" equality ":" ternary ;
+equality    -> comparison? ( ( "==" | "!=" ) comparison )* ;
+comparison  -> term? ( ( ">=" | ">" | "<" | "<=" ) term )* ; 
+term        -> factor? ( ( "+" | "-" ) factor )* ;
+factor      -> unary? ( ( "/" | "*" ) unary )* ;
+unary       -> ( "!" | "-" | "+" ) unary | primary ;
+primary     -> NUMBER | STRING | "true" | "false" | "nil" | "(" expression ")" ;
+```
+
+Error if unary '+' expression:
+
+```java
+private Expr unary() 
+{
+    if (match(PLUS))
+    {
+        error(peek(), "Unary '+' expressions are not supported.");
+    }
+```
+
+## Chapter 7: Evaluating Expressions
+
+### Challenge 7.1
+
+My first intuition is that this feature should not be implemented. The reason is that many decisions have to be made about what things like `3 < "pumpkin"` will evaluate to. Those decisions are not transparent to the user and might lead to confusion. Java does not overload the comparison operators for strings and numbers (one can make use of the `Comparable` interface or `Comparator` class). JavaScript allows for comparing different types. The rules are actually not too complex.
+
+- JavaScript converts the string of the expression to a number
+- If its not a number (cannot be converted) the value is just `NaN`
+- If its the empty string the value is 0
+- After conversion the comparison can continue normally
+
+I think those rules are not too bad but also not super useful if you can instead just explicitly convert the type...
+
+### Challenge 7.2
+
+Enable concatenation of string and number:
+
+```java
+case PLUS:
+    if (left instanceof Double && right instanceof Double)
+        return (double)left + (double)right;
+    if (left instanceof String && right instanceof String)
+        return (String)left + (String)right;
+    if (left instanceof String && right instanceof Double)
+        return (String)left + String.valueOf(right);
+    if (left instanceof Double && right instanceof String)
+        return String.valueOf(left) + (String)right;
+    throw new RuntimeError(expr.operator, "Operands must be two numbers or two strings.");
+```
+
+### Challenge 7.3
+
+Right now division by zero looks like this: `x / 0 = Infinity`. If this happens inside a greater term the term will still evaluate to `Infinity`. JavaScript also does it like this. Java throws an `ArithmeticException`. I think it is best to handle division by zero similar to java and terminate the program because if an expression returns `Infinity` the programmer probably did something wrong and you cannot use the value of the expression afterwards.  
+Handle division by zero:
+
+```java
+case SLASH:
+    checkNumberOperands(expr.operator, left, right);
+    if ((double)right == 0)
+    {
+        throw new RuntimeError(expr.operator, "Division by zero.");
+    }
+    return (double)left / (double)right;
+```
+
+## Chapter 8: Statements and State
