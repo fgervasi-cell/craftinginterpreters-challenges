@@ -400,3 +400,13 @@ case SLASH:
 ```
 
 ## Chapter 8: Statements and State
+
+### Challenge 8.1
+
+### Challenge 8.2
+
+### Challenge 8.3
+
+Expectation: First a `Stmt.Var` ist parsed. Afterwards a block will be parsed with another `Stmt.Var` inside and a `print` statement. When interpreted `a` will be assigned the value "1" in the most outer environment. Then another envoironment is opened inside of it because of the upcoming block statement. Inside this block we have another variable declaration. First the initializer is interpreted. In the initializer we refer to the `a` variable of the outer scope so the result of this expression should be "1 + 2 = 3". This value is assigned to the "new" `a` and gets printed. So the expected answer is that "3" is printed but outside of the block `a` has still the value "1". This would not be the case if we did not search for a refered variable in the most inner scope first.  
+
+Java gives an error "Duplicate local variable" in this case.
