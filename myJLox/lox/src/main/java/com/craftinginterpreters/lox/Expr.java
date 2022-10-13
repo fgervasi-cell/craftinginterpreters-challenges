@@ -51,11 +51,12 @@ abstract class Expr
     }
     static class Ternary extends Expr
     {
-        Ternary(Expr left, Expr inner, Expr right)
+        Ternary(Expr left, Expr inner, Expr right, Token condition)
         {
             this.left = left;
             this.inner = inner;
             this.right = right;
+            this.condition = condition;
         }
 
         @Override
@@ -67,6 +68,7 @@ abstract class Expr
         final Expr left;
         final Expr inner;
         final Expr right;
+        final Token condition;
     }
     static class Grouping extends Expr
     {

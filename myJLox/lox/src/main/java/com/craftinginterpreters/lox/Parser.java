@@ -141,10 +141,11 @@ public class Parser
         Expr expr = equality();
         if (match(QUESTION_MARK))
         {
+            Token condition = previous();
             Expr inner = equality();
             consume(COLON, "Expected ':' for ternary operator.");
             Expr right = ternary();
-            expr = new Expr.Ternary(expr, inner, right);
+            expr = new Expr.Ternary(expr, inner, right, condition);
         }
 
         return expr;

@@ -25,7 +25,7 @@ public class Environment
 
     Object get(Token name)
     {
-        if (values.containsKey(name.lexeme))
+        if (values.containsKey(name.lexeme) && values.get(name.lexeme) != null)
             return values.get(name.lexeme);
 
         if (enclosing != null)

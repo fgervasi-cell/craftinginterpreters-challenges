@@ -35,9 +35,13 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>
     }
 
     @Override
-    public Object visitCommaExpr(Comma expr) {
-        // TODO Auto-generated method stub
-        return null;
+    public Object visitCommaExpr(Comma expr) 
+    {
+        for (int i = 0; i < expr.exprs.size() - 1; i++)
+        {
+            evaluate(expr.exprs.get(i));
+        }
+        return evaluate(expr.exprs.get(expr.exprs.size() - 1));
     }
 
     @Override
@@ -93,9 +97,19 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>
     }
 
     @Override
-    public Object visitTernaryExpr(Ternary expr) {
-        // TODO Auto-generated method stub
-        return null;
+    public Object visitTernaryExpr(Ternary expr) 
+    {
+        Object condition = evaluate(expr.left);
+
+        if (!(condition instanceof Boolean))
+            throw new RuntimeError(expr.condition, "The left expression of a ternary operator" + 
+                                   " must evaluate to a boolean value.");
+        
+        if ((boolean)condition)
+        {
+            return evaluate(expr.inner);
+        }
+        return evaluate(expr.right);
     }
 
     @Override
