@@ -403,6 +403,32 @@ case SLASH:
 
 ### Challenge 8.1
 
+In `Lox.runPrompt(String)` check if the line ends with a smicolon. If not it cannot be a statement so we evaluate it. To be able to parse the entered string we add the semicolon.
+
+```java
+if (!line.endsWith(";"))
+    // The line is not a statement.
+    evaluate(line + ";");
+```
+
+Now we can continue as in `Lox.run(String)`. The parsed statement must be a statement expression. From this statement we can get the encapsulated expression and interpret its value to print it on the screen. Finished...
+
+```java
+private static void evaluate(String source)
+{
+    Scanner scanner = new Scanner(source);
+    List<Token> tokens = scanner.scanTokens();
+    Parser parser = new Parser(tokens);
+    List<Stmt> statements = parser.parse();
+
+    if (hadError || !(statements.get(0) instanceof Stmt.Expression))
+        return;
+
+    System.out.println(((Stmt.Expression)statements.get(0))
+                        .expression.accept(new Interpreter()));
+}
+```
+
 ### Challenge 8.2
 
 Challenge:
@@ -439,3 +465,5 @@ Object get(Token name)
 Expectation: First a `Stmt.Var` ist parsed. Afterwards a block will be parsed with another `Stmt.Var` inside and a `print` statement. When interpreted `a` will be assigned the value "1" in the most outer environment. Then another envoironment is opened inside of it because of the upcoming block statement. Inside this block we have another variable declaration. First the initializer is interpreted. In the initializer we refer to the `a` variable of the outer scope so the result of this expression should be "1 + 2 = 3". This value is assigned to the "new" `a` and gets printed. So the expected answer is that "3" is printed but outside of the block `a` has still the value "1". This would not be the case if we did not search for a refered variable in the most inner scope first.  
 
 Java gives an error "Duplicate local variable" in this case.
+
+## Chapter 9: Control Flow

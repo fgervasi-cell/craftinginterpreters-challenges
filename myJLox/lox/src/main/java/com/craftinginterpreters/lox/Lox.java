@@ -42,7 +42,11 @@ public class Lox
             String line = reader.readLine();
             if (line == null) 
                 break;
-            run(line);
+            if (!line.endsWith(";"))
+                // The line is not a statement.
+                evaluate(line + ";");
+            else
+                run(line);
             hadError = false;
         }
     }
@@ -59,6 +63,20 @@ public class Lox
             return;
 
         interpreter.interpret(statements);
+    }
+
+    private static void evaluate(String source)
+    {
+        Scanner scanner = new Scanner(source);
+        List<Token> tokens = scanner.scanTokens();
+        Parser parser = new Parser(tokens);
+        List<Stmt> statements = parser.parse();
+
+        if (hadError || !(statements.get(0) instanceof Stmt.Expression))
+            return;
+
+        System.out.println(((Stmt.Expression)statements.get(0))
+                            .expression.accept(new Interpreter()));
     }
 
     static void error(int line, String message)
