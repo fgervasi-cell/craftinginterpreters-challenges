@@ -23,13 +23,16 @@ public class GenerateAst
                 "Literal: Object value",
                 "Variable: Token name",
                 "Unary: Token operator, Expr right",
+                "Logical: Expr left, Token operator, Expr right",
                 "Assign: Token name, Expr value"));
 
         defineAst(outputDir, "Stmt", Arrays.asList(
                   "Expression: Expr expression",
                   "Print: Expr expression",
                   "Var: Token name, Expr initializer",
-                  "Block: List<Stmt> statements"));
+                  "Block: List<Stmt> statements",
+                  "If: Expr condition, Stmt thenBranch, Stmt elseBranch",
+                  "While: Expr condition, Stmt body"));
     }
 
     private static void defineAst(String outputDir, String baseName, List<String> types)

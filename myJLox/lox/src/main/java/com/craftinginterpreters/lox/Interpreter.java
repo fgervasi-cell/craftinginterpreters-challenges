@@ -7,13 +7,16 @@ import com.craftinginterpreters.lox.Expr.Binary;
 import com.craftinginterpreters.lox.Expr.Comma;
 import com.craftinginterpreters.lox.Expr.Grouping;
 import com.craftinginterpreters.lox.Expr.Literal;
+import com.craftinginterpreters.lox.Expr.Logical;
 import com.craftinginterpreters.lox.Expr.Ternary;
 import com.craftinginterpreters.lox.Expr.Unary;
 import com.craftinginterpreters.lox.Expr.Variable;
 import com.craftinginterpreters.lox.Stmt.Block;
 import com.craftinginterpreters.lox.Stmt.Expression;
+import com.craftinginterpreters.lox.Stmt.If;
 import com.craftinginterpreters.lox.Stmt.Print;
 import com.craftinginterpreters.lox.Stmt.Var;
+import com.craftinginterpreters.lox.Stmt.While;
 
 public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>
 {
@@ -125,6 +128,19 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>
     }
 
     @Override
+    public Object visitLogicalExpr(Logical expr)
+    {
+        Object left = evaluate(expr.left);
+        if (expr.operator.type == TokenType.OR && isTruthy(left)
+            || expr.operator.type == TokenType.AND && !isTruthy(left))
+        {
+            return left;
+        }
+        
+        return evaluate(expr.right);
+    }
+
+    @Override
     public Object visitUnaryExpr(Unary expr) 
     {
         Object right = evaluate(expr.right);
@@ -154,6 +170,21 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>
     }
 
     @Override
+    public Void visitIfStmt(If stmt)
+    {
+        Object condition = evaluate(stmt.condition);
+        if (isTruthy(condition))
+        {
+            execute(stmt.thenBranch);
+        }
+        else if (stmt.thenBranch != null)
+        {
+            execute(stmt.elseBranch);
+        }
+        return null;
+    }
+
+    @Override
     public Void visitPrintStmt(Print stmt) 
     {
         Object value = evaluate(stmt.expression);
@@ -170,6 +201,16 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>
 
         environment.define(statement.name.lexeme, value);
 
+        return null;
+    }
+
+    @Override
+    public Void visitWhileStmt(While statement)
+    {
+        while (isTruthy(evaluate(statement.condition)))
+        {
+            execute(statement.body);
+        }
         return null;
     }
 
