@@ -66,6 +66,13 @@ public class Parser
         return new Stmt.While(condition, body);
     }
 
+    private Stmt breakStatement()
+    {
+        Token position = previous();
+        consume(SEMICOLON, "Expected ';' after 'break'.");
+        return new Stmt.Break(position);
+    }
+
     private Stmt statement()
     {
         if (match(PRINT))
@@ -78,6 +85,8 @@ public class Parser
             return whileStatement();
         if (match(FOR))
             return forStatement();
+        if (match(BREAK))
+            return breakStatement();
         
         return expressionStatement();
     }

@@ -12,6 +12,7 @@ import com.craftinginterpreters.lox.Expr.Ternary;
 import com.craftinginterpreters.lox.Expr.Unary;
 import com.craftinginterpreters.lox.Expr.Variable;
 import com.craftinginterpreters.lox.Stmt.Block;
+import com.craftinginterpreters.lox.Stmt.Break;
 import com.craftinginterpreters.lox.Stmt.Expression;
 import com.craftinginterpreters.lox.Stmt.If;
 import com.craftinginterpreters.lox.Stmt.Print;
@@ -21,6 +22,14 @@ import com.craftinginterpreters.lox.Stmt.While;
 public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>
 {
     private Environment environment = new Environment();
+
+    class BreakException extends RuntimeException
+    {
+        public BreakException()
+        {
+            super();
+        }
+    }
 
     void interpret(List<Stmt> statements)
     {
@@ -177,7 +186,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>
         {
             execute(stmt.thenBranch);
         }
-        else if (stmt.thenBranch != null)
+        else if (stmt.elseBranch != null)
         {
             execute(stmt.elseBranch);
         }
@@ -209,9 +218,22 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>
     {
         while (isTruthy(evaluate(statement.condition)))
         {
-            execute(statement.body);
+            try
+            {
+                execute(statement.body);
+            }
+            catch (Interpreter.BreakException breakLoop)
+            {
+                break;
+            }
         }
         return null;
+    }
+
+    @Override
+    public Void visitBreakStmt(Break statement)
+    {
+        throw new BreakException();
     }
 
     @Override

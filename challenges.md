@@ -467,3 +467,55 @@ Expectation: First a `Stmt.Var` ist parsed. Afterwards a block will be parsed wi
 Java gives an error "Duplicate local variable" in this case.
 
 ## Chapter 9: Control Flow
+
+### Challenge 9.1
+
+### Challenge 9.2
+
+Instead of looping *recursive* function calls can be used to execute code several times. Functional programming languages like *Haskell* or *Scheme* use recursion instead of loops because they cannot store and modify the state of a variable.
+
+### Challenge 9.3
+
+Parsing the new keyword into an AST node:
+
+```java
+private Stmt breakStatement()
+{
+    Token position = previous();
+    consume(SEMICOLON, "Expected ';' after 'break'.");
+    return new Stmt.Break(position);
+}
+```
+
+Throw a custom exception when interpreting a break statement so that the outer loop know to stop execution:
+
+```java
+@Override
+public Void visitBreakStmt(Break statement)
+{
+    throw new BreakException();
+}
+```
+
+Change the loop interpretation accordingly:
+
+```java
+@Override
+public Void visitWhileStmt(While statement)
+{
+    while (isTruthy(evaluate(statement.condition)))
+    {
+        try
+        {
+            execute(statement.body);
+        }
+        catch (Interpreter.BreakException breakLoop)
+        {
+            break;
+        }
+    }
+    return null;
+}
+```
+
+## Chapter 10: Functions
