@@ -9,6 +9,7 @@ abstract class Expr
         R visitCommaExpr(Comma expr);
         R visitBinaryExpr(Binary expr);
         R visitTernaryExpr(Ternary expr);
+        R visitCallExpr(Call expr);
         R visitGroupingExpr(Grouping expr);
         R visitLiteralExpr(Literal expr);
         R visitVariableExpr(Variable expr);
@@ -70,6 +71,25 @@ abstract class Expr
         final Expr inner;
         final Expr right;
         final Token condition;
+    }
+    static class Call extends Expr
+    {
+        Call(Expr callee, Token paren, List<Expr> arguments)
+        {
+            this.callee = callee;
+            this.paren = paren;
+            this.arguments = arguments;
+        }
+
+        @Override
+        <R> R accept(Visitor<R> visitor)
+        {
+            return visitor.visitCallExpr(this);
+        }
+
+        final Expr callee;
+        final Token paren;
+        final List<Expr> arguments;
     }
     static class Grouping extends Expr
     {

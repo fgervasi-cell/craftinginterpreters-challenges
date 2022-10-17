@@ -19,6 +19,7 @@ public class GenerateAst
                 "Comma: List<Expr> exprs",
                 "Binary: Expr left, Token operator, Expr right",
                 "Ternary: Expr left, Expr inner, Expr right, Token condition",
+                "Call: Expr callee, Token paren, List<Expr> arguments",
                 "Grouping: Expr expression",
                 "Literal: Object value",
                 "Variable: Token name",
@@ -28,6 +29,7 @@ public class GenerateAst
 
         defineAst(outputDir, "Stmt", Arrays.asList(
                   "Expression: Expr expression",
+                  "Function: Token name, List<Token> params, List<Stmt> body",
                   "Print: Expr expression",
                   "Var: Token name, Expr initializer",
                   "Block: List<Stmt> statements",
