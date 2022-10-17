@@ -1,0 +1,56 @@
+// Control flow with dynamic dispatch
+
+// First class functions example
+fun hello(functionArg)
+{
+    print "Hello";
+    print functionArg();
+}
+
+fun world()
+{
+    return "World";
+}
+
+hello(world);
+
+// Dynamic dispatch example
+class Pet
+{
+    speak()
+    {
+        return "Undefined";
+    }
+}
+
+class Dog < Pet
+{
+    speak()
+    {
+        return "Woof";
+    }
+}
+
+class Cat < Pet 
+{
+    speak()
+    {
+        return "Cat";
+    }
+}
+
+fun speak(pet)
+{
+    print pet.speak();
+}
+
+var pet = Pet();
+var dog = Dog();
+var cat = Cat();
+
+speak(pet);
+speak(dog);
+speak(cat);
+
+
+

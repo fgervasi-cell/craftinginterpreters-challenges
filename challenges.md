@@ -470,6 +470,70 @@ Java gives an error "Duplicate local variable" in this case.
 
 ### Challenge 9.1
 
+First class functions: A language has first class functions if functions are treated as any other variable.
+
+```lox
+// First class functions example
+fun hello(functionArg)
+{
+    print "Hello";
+    print functionArg();
+}
+
+fun world()
+{
+    return "World";
+}
+
+hello(world);
+```
+
+With first class functions one can execute different code based on which function is passed as an argument. This can also be used for branching inside the code.  
+
+Dynamic dispatch means determining which function to call based on the objects type.
+
+```lox
+// Dynamic dispatch example
+class Pet
+{
+    speak()
+    {
+        return "Undefined";
+    }
+}
+
+class Dog < Pet
+{
+    speak()
+    {
+        return "Woof";
+    }
+}
+
+class Cat < Pet 
+{
+    speak()
+    {
+        return "Cat";
+    }
+}
+
+fun speak(pet)
+{
+    print pet.speak();
+}
+
+var pet = Pet();
+var dog = Dog();
+var cat = Cat();
+
+speak(pet);
+speak(dog);
+speak(cat);
+```
+
+Based on the type of each variable another path in the program is chosen. This is how branching can be achieved using dynamic dispatch.
+
 ### Challenge 9.2
 
 Instead of looping *recursive* function calls can be used to execute code several times. Functional programming languages like *Haskell* or *Scheme* use recursion instead of loops because they cannot store and modify the state of a variable.
