@@ -90,6 +90,8 @@ public class Parser
             return forStatement();
         if (match(BREAK))
             return breakStatement();
+        if (match(RETURN))
+            return returnStatement();
         
         return expressionStatement();
     }
@@ -146,6 +148,16 @@ public class Parser
         Expr value = expression();
         consume(SEMICOLON, "Expect ';' after value.");
         return new Stmt.Print(value);
+    }
+
+    private Stmt.Return returnStatement()
+    {
+        Token keyword = previous();
+        Expr value = null;
+        if (!check(SEMICOLON))
+            value = expression();
+        consume(SEMICOLON, "Expect ';' after return value.");
+        return new Stmt.Return(keyword, value);
     }
 
     private Stmt.Expression expressionStatement()
@@ -381,7 +393,7 @@ public class Parser
             {
                 if (arguments.size() >= 255)
                     error(peek(), "Can't have more than 255 arguments.");
-                arguments.add(expression());
+                arguments.add(assignment());
             }
             while (match(COMMA));
         }
