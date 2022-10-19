@@ -8,6 +8,7 @@ import com.craftinginterpreters.lox.Expr.Binary;
 import com.craftinginterpreters.lox.Expr.Call;
 import com.craftinginterpreters.lox.Expr.Comma;
 import com.craftinginterpreters.lox.Expr.Grouping;
+import com.craftinginterpreters.lox.Expr.Lambda;
 import com.craftinginterpreters.lox.Expr.Literal;
 import com.craftinginterpreters.lox.Expr.Logical;
 import com.craftinginterpreters.lox.Expr.Ternary;
@@ -219,6 +220,12 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>
     public Object visitVariableExpr(Variable expr)
     {
         return environment.get(expr.name);
+    }
+
+    @Override
+    public Object visitLambdaExpr(Lambda expr)
+    {
+        return new LoxFunction(expr.functionStmt, environment);
     }
     
     @Override

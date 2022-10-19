@@ -1,0 +1,17 @@
+fun thrice(fn)
+{
+    for (var i = 1; i <= 3; i = i + 1)
+    {
+        fn(i);
+    }
+}
+
+thrice(fun (a) {
+    print a;
+});
+
+var add = fun (a, b) {
+    return a + b;
+}; // Do not forget the semicolon ;)!
+
+print add(5, 4);

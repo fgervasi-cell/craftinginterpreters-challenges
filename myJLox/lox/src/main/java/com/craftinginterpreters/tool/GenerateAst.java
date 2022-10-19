@@ -25,7 +25,8 @@ public class GenerateAst
                 "Variable: Token name",
                 "Unary: Token operator, Expr right",
                 "Logical: Expr left, Token operator, Expr right",
-                "Assign: Token name, Expr value"));
+                "Assign: Token name, Expr value",
+                "Lambda: Stmt.Function functionStmt"));
 
         defineAst(outputDir, "Stmt", Arrays.asList(
                   "Expression: Expr expression",

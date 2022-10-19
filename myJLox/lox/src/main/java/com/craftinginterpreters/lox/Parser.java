@@ -169,7 +169,9 @@ public class Parser
 
     private Stmt.Function function(String kind)
     {
-        Token name = consume(IDENTIFIER, "Expect " + kind + " name.");
+        Token name = null;
+        if (!"anonymous function".equals(kind))
+            name = consume(IDENTIFIER, "Expect " + kind + " name.");
         consume(LEFT_PAREN, "Expected '(' after " + kind + " name.");
         List<Token> params = new ArrayList<>();
         if (!check(RIGHT_PAREN))
@@ -429,6 +431,8 @@ public class Parser
             return new Expr.Literal(previous().literal);
         if (match(IDENTIFIER))
             return new Expr.Variable(previous());
+        if (match(FUN))
+            return lambda();
 
         if (match(LEFT_PAREN))
         {
@@ -438,6 +442,12 @@ public class Parser
         }
 
         throw error(peek(), "Expect expression.");
+    }
+
+    private Expr.Lambda lambda()
+    {
+        Stmt.Function functionStmt = function("anonymous function");
+        return new Expr.Lambda(functionStmt);
     }
 
     private boolean match(TokenType... types) 

@@ -16,6 +16,7 @@ abstract class Expr
         R visitUnaryExpr(Unary expr);
         R visitLogicalExpr(Logical expr);
         R visitAssignExpr(Assign expr);
+        R visitLambdaExpr(Lambda expr);
     }
     static class Comma extends Expr
     {
@@ -188,6 +189,21 @@ abstract class Expr
 
         final Token name;
         final Expr value;
+    }
+    static class Lambda extends Expr
+    {
+        Lambda(Stmt.Function functionStmt)
+        {
+            this.functionStmt = functionStmt;
+        }
+
+        @Override
+        <R> R accept(Visitor<R> visitor)
+        {
+            return visitor.visitLambdaExpr(this);
+        }
+
+        final Stmt.Function functionStmt;
     }
 
     abstract <R> R accept(Visitor<R> visitor);

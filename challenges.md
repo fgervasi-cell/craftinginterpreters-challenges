@@ -583,3 +583,59 @@ public Void visitWhileStmt(While statement)
 ```
 
 ## Chapter 10: Functions
+
+### Challenge 10.1
+
+### Challenge 10.2
+
+Change grammar to:
+
+```ebnf
+funDecl -> "fun" function ;
+function -> IDENTIFIER? "(" parameters? ")" block ;
+```
+
+That means a function name is optional. If the name is omitted we have a *lamda* or *anonymous* function at hand. This approach does not seem to work because lambdas are not statements but expressions which immediately return the function.  
+
+Add new expression for this purpose:
+
+```java
+static class Lambda extends Expr
+{
+    Lambda(Stmt.Function functionStmt)
+    {
+        this.functionStmt = functionStmt;
+    }
+
+    @Override
+    <R> R accept(Visitor<R> visitor)
+    {
+        return visitor.visitLambdaExpr(this);
+    }
+
+    final Stmt.Function functionStmt;
+}
+```
+
+Parse a lambda expression as a primary expression if we match *FUN*. Parse code:
+
+```java
+private Expr.Lambda lambda()
+{
+    // For this type we do not consume an *IDENTIFIER* for the name of the function.
+    Stmt.Function functionStmt = function("anonymous function");
+    return new Expr.Lambda(functionStmt);
+}
+```
+
+Interpreter code:
+
+```java
+@Override
+public Object visitLambdaExpr(Lambda expr)
+{
+    return new LoxFunction(expr.functionStmt, environment);
+}
+```
+
+### Challenge 10.3
