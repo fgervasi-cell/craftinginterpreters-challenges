@@ -661,3 +661,9 @@ The expectation is wrong. The program prints "local". This is because of the rea
 JavaScript and Python as far as I can tell behave in the same way.
 
 ## Chapter 11: Resolving and Binding
+
+### Challenge 11.1
+
+### Challenge 11.2
+
+### Challenge 11.3
