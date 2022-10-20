@@ -639,3 +639,19 @@ public Object visitLambdaExpr(Lambda expr)
 ```
 
 ### Challenge 10.3
+
+My expectation is that such a program should print "5". The parameters are in another scope compared to the variables declared in the body because while parsing the body we assign a new environment to it.
+
+```lox
+fun scope(a)
+{
+    var a = "local";
+    print a;
+}
+
+scope(5);
+```
+
+The expectation is wrong. The program prints "local". This is because of the reason already explained above but the conclusion I made was wrong. If we assign a new environment to the body the variable "a" is declared in this environment and therefore if we print "a" we search for its declaration in the inner most environment first which is of course the environment of the function body so "local" is printed.  
+
+JavaScript and Python as far as I can tell behave in the same way.
