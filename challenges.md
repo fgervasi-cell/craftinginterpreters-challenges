@@ -586,6 +586,10 @@ public Void visitWhileStmt(While statement)
 
 ### Challenge 10.1
 
+Guess: Maybe because Smalltalk is compiled and not interpreted so we do not check for the number of arguments at runtime but at compile time.  
+
+Wikipedia: "Smalltalk programs are usually compiled to bytecode, which is then interpreted by a virtual machine or dynamically translated into machine-native code."
+
 ### Challenge 10.2
 
 Change grammar to:
@@ -655,3 +659,5 @@ scope(5);
 The expectation is wrong. The program prints "local". This is because of the reason already explained above but the conclusion I made was wrong. If we assign a new environment to the body the variable "a" is declared in this environment and therefore if we print "a" we search for its declaration in the inner most environment first which is of course the environment of the function body so "local" is printed.  
 
 JavaScript and Python as far as I can tell behave in the same way.
+
+## Chapter 11: Resolving and Binding
