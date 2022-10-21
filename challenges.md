@@ -664,6 +664,8 @@ JavaScript and Python as far as I can tell behave in the same way.
 
 ### Challenge 11.1
 
+Because the syntax/grammar does not allow declaring a function without immediately giving it a name (except lambda functions but thats a different story).
+
 ### Challenge 11.2
 
 Java code like this
