@@ -666,4 +666,75 @@ JavaScript and Python as far as I can tell behave in the same way.
 
 ### Challenge 11.2
 
+Java code like this
+
+```java
+String a = "outer";
+{
+    String a = a;
+}
+```
+
+produces the compile time error "Duplicate local variable a".  
+
+Python allows code like this and treats it as a self assignment:
+
+```python
+a = "outer"
+
+def foo():
+    a = a
+
+print(a)
+```
+
+In the above example no new varaible a in the inner scope is created. It references the a defined in the outer scope. This is because Python declares variables dynamically.  
+
+JavaScript has very interesting behaviour.
+
+```javascript
+var a = "outer";
+{
+  var a = a;
+  console.log(a);
+}
+
+console.log(a);
+// prints "outer", "outer"
+```
+
+If *var* is used to declare the variables the program runs and prints "outer" both times.
+
+```javascript
+let a = "outer";
+{
+  var a = a;
+  console.log(a);
+}
+
+console.log(a);
+// error: The symbol "a" has already been declared
+```
+
+If *let* is used to declare the variable in the global scope an error tells the user that "a" has already been declared.
+
+```javascript
+var a = "outer";
+{
+  let a = a;
+  console.log(a);
+}
+
+console.log(a);
+// error: ReferenceError: Cannot access 'a2' before initialization
+```
+
+If *let* is used inside the inner scope the an *ReferenceError* is thrown.  
+
+JavaScript has the worst solution to this problem out of all 4 languages (including lox) because the *let* and *var* syntax and semantics are very complicated to understand. Java and lox have the best solution in my opinion because they report it as an error before the user can even run the program. Python declares variables dynamically and they treat this case just as a self assignment and give a warning but not an error so the program is valid.
+
 ### Challenge 11.3
+
+### Challenge 11.4
+
+## Chapter 12: Classes

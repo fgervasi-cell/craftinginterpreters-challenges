@@ -1,4 +1,6 @@
-com\craftinginterpreters\lox\Lox.class
-com\craftinginterpreters\lox\Token.class
+com\craftinginterpreters\lox\Parser$1.class
 com\craftinginterpreters\lox\Scanner.class
+com\craftinginterpreters\lox\Token.class
+com\craftinginterpreters\lox\Lox.class
+com\craftinginterpreters\lox\Interpreter$2.class
 com\craftinginterpreters\lox\TokenType.class
