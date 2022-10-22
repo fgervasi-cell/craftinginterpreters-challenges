@@ -737,6 +737,19 @@ JavaScript has the worst solution to this problem out of all 4 languages (includ
 
 ### Challenge 11.3
 
+This lox code
+
+```lox
+var a = "not used"; // report this as an error
+var b = "used";
+
+print b;
+```
+
+should report an error like "The variable 'a' is never used". Therefore we track all the declared variables when visiting a variable statement in a map which stores the variable name and if it was referenced or not using a boolean. When visiting a variable expression we update the corresponding entry in the map.  
+
+When the resolver has run we check if there are still variables left in the map with a boolean value of 'false' which means they were not referenced any where in the program. We report that as an error.
+
 ### Challenge 11.4
 
 ## Chapter 12: Classes

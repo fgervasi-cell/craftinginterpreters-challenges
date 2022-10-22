@@ -1,0 +1,4 @@
+var a = "not used"; // report this as an error
+var b = "used";
+
+print b;

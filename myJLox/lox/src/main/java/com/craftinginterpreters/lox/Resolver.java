@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
+import java.util.Map.Entry;
 
 import com.craftinginterpreters.lox.Expr.Assign;
 import com.craftinginterpreters.lox.Expr.Binary;
@@ -30,6 +31,7 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void>
 {
     private final Interpreter interpreter;
     private final Stack<Map<String, Boolean>> scopes = new Stack<>();
+    private final Map<Token, Boolean> usages = new HashMap<>();
     private FunctionType currentFunction = FunctionType.NONE;
     private boolean insideLoop = false;
 
@@ -84,6 +86,7 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void>
         if (stmt.initializer != null)
             resolve(stmt.initializer);
         define(stmt.name);
+        usages.put(stmt.name, false);
         return null;
     }
 
@@ -183,6 +186,7 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void>
             Lox.error(expr.name, "Can't read local variable in its own initializer.");
 
         resolveLocal(expr, expr.name);
+        usages.put(expr.name, true);
         return null;
     }
 
@@ -222,6 +226,7 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void>
         {
             resolve(statement);
         }
+        checkUsages();
     }
 
     private void resolve(Stmt statement)
@@ -288,5 +293,14 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void>
         resolve(function.body);
         endScope();
         currentFunction = enclosingFunction;
+    }
+
+    private void checkUsages()
+    {
+        for (Entry<Token, Boolean> entry : usages.entrySet())
+        {
+            if (!entry.getValue().booleanValue())
+                Lox.error(entry.getKey(), "The variable '" + entry.getKey().lexeme + "' is never used.");
+        }
     }
 }
