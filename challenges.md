@@ -14,13 +14,22 @@ The six domain-specific languages are:
 - Syntactically Awesome Style Sheets (Sass): Preprocessor scripting language that is interpreted or compiled into Cascading Style Sheets (CSS)
 - ...
 
+[Solution](https://github.com/munificent/craftinginterpreters/blob/01e6f5b8f3e5dfa65674c2f9cf4700d73ab41cf8/note/answers/chapter01_introduction/1.md)  
+*Comment: YAML and gitignore are not listed in the solution. Instead Jinja2 is mentioned. Jinja is a web template engine for Python (similar to Django).*
+
 ### Challenge 1.2
 
-See "HelloWorld.java"
+See "HelloWorld.java"  
+
+[Solution](https://github.com/munificent/craftinginterpreters/blob/01e6f5b8f3e5dfa65674c2f9cf4700d73ab41cf8/note/answers/chapter01_introduction/2/Hello.java)  
+*Comment: And whatever build tool one chooses...*
 
 ### Challenge 1.3
 
 See "/c_programming/doubly_linked_list/" for all the files. I did it with integers instead of strings though...
+
+[Solution](https://github.com/munificent/craftinginterpreters/blob/01e6f5b8f3e5dfa65674c2f9cf4700d73ab41cf8/note/answers/chapter01_introduction/3/linked_list.c)  
+*Comment: The solution looks pretty similar to mine so I guess I did it correctly. I also tested my solution thoroughly. The difference is that the solution works with strings.*
 
 ## Chapter 2: A Map of the Territory
 
@@ -38,14 +47,74 @@ See "/c_programming/doubly_linked_list/" for all the files. I did it with intege
 
 ## Chapter 3: The Lox Language
 
+[Solution](https://github.com/munificent/craftinginterpreters/blob/01e6f5b8f3e5dfa65674c2f9cf4700d73ab41cf8/note/answers/chapter03_lox.md)
+
 ### Challenge 3.1
 
-See "./lox_programs/".
+See "./lox_programs/".  
+
+*Comment: Correct.*
 
 ### Challenge 3.2
 
 It is kind of hard for me to come up with questions about the language.
-See the lox programs and the comments I wrote. There I documented some "special" things I noticed. Also under Challenge 3.3 I listed some thing that came to my mind.
+See the lox programs and the comments I wrote. There I documented some "special" things I noticed. Also under Challenge 3.3 I listed some thing that came to my mind.  
+
+*Comment: The solution names some interesting edge cases that will be tested in the following. See ./lox_programs for all of the code.*
+
+What happens if you access a global variable in a function before it is defined?
+
+```lox
+fun foo()
+{
+    print global;
+}
+
+foo();
+
+var global = "global";
+
+// Produces error at line 3: Undefined variable 'global'.
+```
+
+What does it mean to say something is "an error"? Runtime error? Compile time?  
+
+You need to distinguish
+
+- Syntax errors: Detected by the Scanner
+- Compile time errors: Detected at compile time by the Parser
+- Runtime errors: Detected at runtime by the Interpreter
+- Static errors: Detected in the static analysis between parsing and interpretation e.g. by the Resolver
+
+What kind of expressions are allowed when a superclass is specified?  
+
+// TODO  
+
+What happens if you declare two classes or functions with the same name?
+
+```lox
+fun foo()
+{
+    print "foo1";
+}
+
+fun foo()
+{
+    print "foo2";
+}
+
+foo();
+
+// Prints "foo2". I.e. the last defined name is used!
+```
+
+Can a class inherit from something that isn't a class?  
+
+No it cannot or you will get the error "Superclass must be a class". You can however store the value of a class in a variable or return it in a function and inherit from this variable or function.  
+
+Can you reassign to the name that is bound by a class or function declaration?  
+
+Yes you can.
 
 ### Challenge 3.3
 
@@ -59,6 +128,8 @@ Missing features for "real" programs:
 - Inner classes
 - No Arrays
 - No possibility to format the output of the *print* statement
+
+*Comment: Additional things mentioned in the solution are `break`, `continue`, `switch` and a mechanism for handling exceptions.*
 
 ## Chapter 4: Scanning
 
@@ -751,5 +822,7 @@ should report an error like "The variable 'a' is never used". Therefore we track
 When the resolver has run we check if there are still variables left in the map with a boolean value of 'false' which means they were not referenced any where in the program. We report that as an error.
 
 ### Challenge 11.4
+
+// TODO
 
 ## Chapter 12: Classes

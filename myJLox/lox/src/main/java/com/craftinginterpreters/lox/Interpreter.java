@@ -9,15 +9,19 @@ import com.craftinginterpreters.lox.Expr.Assign;
 import com.craftinginterpreters.lox.Expr.Binary;
 import com.craftinginterpreters.lox.Expr.Call;
 import com.craftinginterpreters.lox.Expr.Comma;
+import com.craftinginterpreters.lox.Expr.Get;
 import com.craftinginterpreters.lox.Expr.Grouping;
 import com.craftinginterpreters.lox.Expr.Lambda;
 import com.craftinginterpreters.lox.Expr.Literal;
 import com.craftinginterpreters.lox.Expr.Logical;
+import com.craftinginterpreters.lox.Expr.Set;
 import com.craftinginterpreters.lox.Expr.Ternary;
+import com.craftinginterpreters.lox.Expr.This;
 import com.craftinginterpreters.lox.Expr.Unary;
 import com.craftinginterpreters.lox.Expr.Variable;
 import com.craftinginterpreters.lox.Stmt.Block;
 import com.craftinginterpreters.lox.Stmt.Break;
+import com.craftinginterpreters.lox.Stmt.Class;
 import com.craftinginterpreters.lox.Stmt.Expression;
 import com.craftinginterpreters.lox.Stmt.Function;
 import com.craftinginterpreters.lox.Stmt.If;
@@ -204,6 +208,36 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>
     }
 
     @Override
+    public Object visitSetExpr(Set expr)
+    {
+        Object object = evaluate(expr.object);
+        if (object instanceof LoxInstance)
+        {
+            Object value = evaluate(expr.value);
+            ((LoxInstance)object).set(expr.name, value);
+            return value;
+        }
+        throw new RuntimeError(expr.name, "Only instances have fields.");
+    }
+
+    @Override
+    public Object visitThisExpr(This expr)
+    {
+        return lookUpVariable(expr.keyword, expr);
+    }
+
+    @Override
+    public Object visitGetExpr(Get expr)
+    {
+        Object object = evaluate(expr.object);
+        if (object instanceof LoxInstance)
+        {
+            return ((LoxInstance)object).get(expr.name);
+        }
+        throw new RuntimeError(expr.name, "Only instances have properties.");
+    }
+
+    @Override
     public Object visitUnaryExpr(Unary expr) 
     {
         Object right = evaluate(expr.right);
@@ -237,7 +271,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>
     @Override
     public Object visitLambdaExpr(Lambda expr)
     {
-        return new LoxFunction(expr.functionStmt, environment);
+        return new LoxFunction(expr.functionStmt, environment, false);
     }
     
     @Override
@@ -250,7 +284,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>
     @Override
     public Void visitFunctionStmt(Function stmt)
     {
-        LoxFunction function = new LoxFunction(stmt, environment);
+        LoxFunction function = new LoxFunction(stmt, environment, false);
         environment.define(stmt.name.lexeme, function);
         return null;
     }
@@ -341,6 +375,24 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>
     public Void visitBlockStmt(Block stmt)
     {
         executeBlock(stmt.statements, new Environment(environment));
+        return null;
+    }
+
+    @Override
+    public Void visitClassStmt(Class stmt)
+    {
+        environment.define(stmt.name.lexeme, null);
+
+        Map<String, LoxFunction> methods = new HashMap<>();
+        for (Function method : stmt.methods)
+        {
+            boolean isInitializer = method.name.lexeme.equals("init");
+            LoxFunction function = new LoxFunction(method, environment, isInitializer);
+            methods.put(method.name.lexeme, function);
+        }
+
+        LoxClass klass = new LoxClass(stmt.name.lexeme, methods);
+        environment.assign(stmt.name, klass);
         return null;
     }
 

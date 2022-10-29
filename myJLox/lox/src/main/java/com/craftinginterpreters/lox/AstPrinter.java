@@ -5,8 +5,10 @@ import java.util.List;
 import com.craftinginterpreters.lox.Expr.Assign;
 import com.craftinginterpreters.lox.Expr.Call;
 import com.craftinginterpreters.lox.Expr.Comma;
+import com.craftinginterpreters.lox.Expr.Get;
 import com.craftinginterpreters.lox.Expr.Lambda;
 import com.craftinginterpreters.lox.Expr.Logical;
+import com.craftinginterpreters.lox.Expr.Set;
 import com.craftinginterpreters.lox.Expr.Ternary;
 import com.craftinginterpreters.lox.Expr.Unary;
 import com.craftinginterpreters.lox.Expr.Variable;
@@ -108,6 +110,18 @@ public class AstPrinter implements Expr.Visitor<String>
 
     @Override
     public String visitLambdaExpr(Lambda expr) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public String visitGetExpr(Get expr) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public String visitSetExpr(Set expr) {
         // TODO Auto-generated method stub
         return null;
     }

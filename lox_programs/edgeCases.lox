@@ -1,0 +1,88 @@
+// What happens if you access a global variable in a function before it is defined?
+// Produces error at line 3: Undefined variable 'global'.
+
+// fun foo()
+// {
+//     print global;
+// }
+
+// foo();
+
+// var global = "global";
+
+// What happens if you declare two classes or functions with the same name?
+// Prints "foo2" and "Clazz2".
+
+// fun foo()
+// {
+//     print "foo1";
+// }
+
+// fun foo()
+// {
+//     print "foo2";
+// }
+
+// foo();
+
+// class Clazz
+// {
+//     foo()
+//     {
+//         print "Clazz1";
+//     }
+// }
+
+// class Clazz
+// {
+//     foo()
+//     {
+//         print "Clazz2";
+//     }
+// }
+
+// Clazz().foo();
+
+// Can a class inherit from something that isn't a class?
+// Not really or you will get the error "Superclass must be a class".
+// You can assign the value to a class to a variable and inherit from this variable though.
+
+// class Class1
+// {
+//     foo()
+//     {
+//         print "Class1";
+//     }
+// }
+
+// var clazz = Class1;
+
+// class Class2 < clazz
+// {
+
+// }
+
+// Prints "Class1".
+// Class2().foo();
+
+// Can you reassign to the name that is bound by a class or function declaration?
+// Prints "foo" and "Clazz".
+// Yes you can.
+
+// class Clazz
+// {
+
+// }
+
+// fun foo()
+// {
+
+// }
+
+// var foo = "foo";
+// var Clazz = "Clazz";
+
+// print foo;
+// print Clazz;
+
+
