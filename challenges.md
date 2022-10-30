@@ -88,7 +88,14 @@ You need to distinguish
 
 What kind of expressions are allowed when a superclass is specified?  
 
-// TODO  
+```lox
+class SomeClass < <some_expression>
+{
+    ...
+}
+```
+
+I think the only one that works is VariableExpr (referencing another class name) for \<some_expression>. You cannot use a function call (CallExpr), LiteralExpr or BinaryExpr or anything else that does not hold the value of a class.
 
 What happens if you declare two classes or functions with the same name?
 

@@ -85,4 +85,30 @@
 // print foo;
 // print Clazz;
 
+// What kind of expressions are allowed when a superclass is specified?
+// I.e. class SomeClass < <some_expression>.
+// You can have variables that store a class as a value or functions that return a class (see Question 5).
+// !actually you cannot have a function call to inherit from!
+// VariableExpr
+
+fun foo()
+{
+    return Clazz;
+}
+
+class Clazz
+{
+
+}
+
+class Klass < Clazz
+{
+
+}
+
+// class Klass < foo // does not work!
+// {
+
+// }
+
 
