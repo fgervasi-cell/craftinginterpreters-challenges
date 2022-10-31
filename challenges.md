@@ -33,13 +33,24 @@ See "/c_programming/doubly_linked_list/" for all the files. I did it with intege
 
 ## Chapter 2: A Map of the Territory
 
+[Solution](https://github.com/munificent/craftinginterpreters/blob/01e6f5b8f3e5dfa65674c2f9cf4700d73ab41cf8/note/answers/chapter02_map.md)
+
 ### Challenge 2.1
 
 // TODO
 
 ### Challenge 2.2
 
-// TODO
+Possible reasons not to JIT:
+
+- Hard to implement
+- There can be a delay before the actual execution of a program because it takes time to load and compile the bytecode
+- Heavy usage of cache memory
+
+*Comment: The solution also mentions:*
+
+- *You are tied to a specific CPU architecture*
+- *Some operating systems disallow executing code generated at runtime which makes just in time compilation impossible*
 
 ### Challenge 2.3
 
