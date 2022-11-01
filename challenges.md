@@ -37,7 +37,9 @@ See "/c_programming/doubly_linked_list/" for all the files. I did it with intege
 
 ### Challenge 2.1
 
-// TODO
+There are tons of open source compilers (just search "compiler" on GitHub or smth). However I find it very hard to find the different pieces mentioned in this book. A very simple compiler example is this one: [https://github.com/jamiebuilds/the-super-tiny-compiler](https://github.com/jamiebuilds/the-super-tiny-compiler).  
+
+*Comment: Sadly the solution does not give any examples of good open source compilers.*
 
 ### Challenge 2.2
 
@@ -54,7 +56,9 @@ Possible reasons not to JIT:
 
 ### Challenge 2.3
 
-// TODO
+One reason could be to offer a command line tool that takes code line by line and executes it immediately.
+
+*Comment: The actualy reason is macros. A macro is code that is executed at compile time so it has to be evaluated immediately.*
 
 ## Chapter 3: The Lox Language
 
