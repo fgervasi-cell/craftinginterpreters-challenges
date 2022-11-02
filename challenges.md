@@ -155,11 +155,15 @@ Missing features for "real" programs:
 
 ## Chapter 4: Scanning
 
+[Solution](https://github.com/munificent/craftinginterpreters/blob/01e6f5b8f3e5dfa65674c2f9cf4700d73ab41cf8/note/answers/chapter04_scanning.md)
+
 ### Challenge 4.1
 
 In regular grammars it is allowed only to have one non-terminal on the left side of a production rule.
 On the right only one terminal and a maximum of one non-terminal symbol can be used. E.g. A --> aB or A --> a. The grammars of Python and Haskell break with this rule. In fact a lot of programming languages count on context-free (Type 2) grammars where the right side of a production rule can contain an arbitrary sequence of terminals and non-terminals. Such grammar can be described by the Backus-Naur-Form (BNF). Context-free grammars are used because they are more powerful than regular (Type 3) languages/grammars. E.g. with a type 3 grammar you cannot even specify well formed bracket expressions. Type 1 grammars on the other hand are too complex. Instead the context is inferred at a leater state in the parser.  
-[https://qr.ae/pvegwT](https://qr.ae/pvegwT)
+[https://qr.ae/pvegwT](https://qr.ae/pvegwT)  
+
+*Comment: The solution basically states the same thing as I do in the above answer but explains it more nicely in respect to Python and Haskell. Both languages have significant levels of indentation. Those levels have to be tracked i.e. "stored" in the "memory" of the grammar which is not possible with regular grammars (this is also why well formed bracket expressions are not possible).*
 
 ### Challenge 4.2
 
@@ -184,13 +188,17 @@ Spaces in Ruby:
 Spaces in the C preprocessor:  
 The preprocessor in some cases inserts whitespace elements in its token stream to eliminate ambiguity.
 
-[https://stackoverflow.com/questions/37796947/spaces-inserted-by-the-c-preprocessor](https://stackoverflow.com/questions/37796947/spaces-inserted-by-the-c-preprocessor)
+[https://stackoverflow.com/questions/37796947/spaces-inserted-by-the-c-preprocessor](https://stackoverflow.com/questions/37796947/spaces-inserted-by-the-c-preprocessor)  
+
+*Comment: My solution might also be true but in the book the focus lies on the optional parantheses for method calls in CoffeeScript and Ruby. The C preprocessor uses spaces to distinguish between "normal" text and function macros.*
 
 ### Challenge 4.3
 
-- In order to do stuff like in challenge 4.2
-- If the parser needs to know about whitespaces
+- In order to do stuff like in challenge 4.2 (cleaner syntax?)
+- If the parser needs to know about whitespaces (e.g. if indentation has a meaning)
 - If whitespaces change the semantic of a program
+
+*Comment: Solution is only interested in not discarding comments. This might be useful for generating documentation and help text in an IDE and to preserve the original formatting in the comment for a nice display.*
 
 ### Challenge 4.4
 
@@ -295,6 +303,8 @@ is also regognized as an error but in the below example the tokens *STAR* and *S
     */
 */
 ```
+
+*Comment: The trick for implementing block comment would have been a variable `nesting` which tracks how many levels the comment nests. That means we increment `nesting` each time we meet a '/\*' and decrement if there is a '\*/'. Afterwards we can check if the nesting is zero again. If not something probably went wrong.*
 
 ## Chapter 5: Representing Code
 
