@@ -333,15 +333,21 @@ argument -> "," expr;
 argument -> "," expr argument;
 ```
 
-The kind of expressions described by that might be class instantiation, function calls or accessing variables of a class instance.
+The kind of expressions described by that might be class instantiation, function calls or accessing variables of a class instance.  
+
+*Comment: The answer about what this grammar represents is correct. My grammar should also be correct although the solution is slightly different but there are several correct ways to solve this challenge.*
 
 ### Challenge 5.2
 
-I do not know any functional language well enough to devise such a pattern I think...
+I do not know any functional language well enough to devise such a pattern I think...  
+
+*Comment: So called "function pointers" can be used to achieve this task.*
 
 ### Challenge 5.3
 
-See *com.craftinginterpreters.lox.RpnRpinter* class. Question that came to mind was how to parse unary operators in RPN. The answer I found stated that you just do not: [https://stackoverflow.com/questions/64867998/how-do-unary-operators-get-parsed-using-rpn](https://stackoverflow.com/questions/64867998/how-do-unary-operators-get-parsed-using-rpn).
+See *com.craftinginterpreters.lox.RpnRpinter* class. Question that came to mind was how to parse unary operators in RPN. The answer I found stated that you just do not: [https://stackoverflow.com/questions/64867998/how-do-unary-operators-get-parsed-using-rpn](https://stackoverflow.com/questions/64867998/how-do-unary-operators-get-parsed-using-rpn).  
+
+*Comment: My solution is correct except that unary expressions can be represented in RPN but one has to introduce a different symbol for unary negation because it cannot be the same as the binary minus or we would not know how many operands to pop from the stack.*
 
 ## Chapter 6: Parsing Expressions
 
