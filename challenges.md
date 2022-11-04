@@ -351,6 +351,8 @@ See *com.craftinginterpreters.lox.RpnRpinter* class. Question that came to mind 
 
 ## Chapter 6: Parsing Expressions
 
+[Solution](https://github.com/munificent/craftinginterpreters/blob/01e6f5b8f3e5dfa65674c2f9cf4700d73ab41cf8/note/answers/chapter06_parsing.md)
+
 ### Challenge 6.1
 
 Comma operator has lowest precedence. Change grammar accordingly:
@@ -398,7 +400,9 @@ int i = (a = a + 2, b + 1); // a will be incremented by 2 and i will have the va
 
 Infos:  
 [https://en.cppreference.com/w/c/language/operator_precedence](https://en.cppreference.com/w/c/language/operator_precedence)  
-[https://en.wikipedia.org/wiki/Comma_operator](https://en.wikipedia.org/wiki/Comma_operator)
+[https://en.wikipedia.org/wiki/Comma_operator](https://en.wikipedia.org/wiki/Comma_operator)  
+
+*Comment: The grammar for comma expressions is correct except that on the right side in the solution only the production rule for the operator with the next highest presedence appears. In other words the comma rule does not appear as a non terminal on the right side. Also in the solution there is no new syntax tree node. Instead the binary operator is reused. The implementation is slightly different from mine so I do not know if mine is totally correct. Maybe I should add some tests...*
 
 ### Challenge 6.2
 
@@ -436,6 +440,8 @@ private Expr ternary()
 }
 ```
 
+*Comment: The implementation should be correct but my grammar is a little bit off. Ternary should also have the possibility to just go to equality so it should probably change to `ternary -> equality ( "?" equality ":" ternary )?`.*
+
 ### Challenge 6.3
 
 Add error productions to grammar:
@@ -462,6 +468,8 @@ private Expr unary()
         error(peek(), "Unary '+' expressions are not supported.");
     }
 ```
+
+*Comment: The solution handles error productions totally different. They are all handled in the primary production rule as seperate alternatives. I am not sure if my solution works as well.*
 
 ## Chapter 7: Evaluating Expressions
 
