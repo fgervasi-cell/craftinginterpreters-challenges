@@ -1,5 +1,6 @@
 {
     "java.project.sourcePaths": [
         "com/craftinginterpreters/challenges"
-    ]
+    ],
+    "java.configuration.updateBuildConfiguration": "automatic"
 }

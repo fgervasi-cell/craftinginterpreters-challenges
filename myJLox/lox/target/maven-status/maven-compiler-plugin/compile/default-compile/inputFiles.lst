@@ -1,4 +1,5 @@
 c:\Users\fgerv\vs-code-projects\craftinginterpreters_challenges\myJLox\lox\src\main\java\com\craftinginterpreters\lox\AstPrinter.java
+c:\Users\fgerv\vs-code-projects\craftinginterpreters_challenges\myJLox\lox\src\main\java\com\craftinginterpreters\lox\LoxInstance.java
 c:\Users\fgerv\vs-code-projects\craftinginterpreters_challenges\myJLox\lox\src\main\java\com\craftinginterpreters\lox\RpnPrinter.java
 c:\Users\fgerv\vs-code-projects\craftinginterpreters_challenges\myJLox\lox\src\main\java\com\craftinginterpreters\lox\Token.java
 c:\Users\fgerv\vs-code-projects\craftinginterpreters_challenges\myJLox\lox\src\main\java\com\craftinginterpreters\lox\Scanner.java
@@ -14,4 +15,5 @@ c:\Users\fgerv\vs-code-projects\craftinginterpreters_challenges\myJLox\lox\src\m
 c:\Users\fgerv\vs-code-projects\craftinginterpreters_challenges\myJLox\lox\src\main\java\com\craftinginterpreters\lox\Parser.java
 c:\Users\fgerv\vs-code-projects\craftinginterpreters_challenges\myJLox\lox\src\main\java\com\craftinginterpreters\lox\Lox.java
 c:\Users\fgerv\vs-code-projects\craftinginterpreters_challenges\myJLox\lox\src\main\java\com\craftinginterpreters\lox\Return.java
+c:\Users\fgerv\vs-code-projects\craftinginterpreters_challenges\myJLox\lox\src\main\java\com\craftinginterpreters\lox\LoxClass.java
 c:\Users\fgerv\vs-code-projects\craftinginterpreters_challenges\myJLox\lox\src\main\java\com\craftinginterpreters\tool\GenerateAst.java

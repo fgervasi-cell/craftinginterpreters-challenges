@@ -473,6 +473,8 @@ private Expr unary()
 
 ## Chapter 7: Evaluating Expressions
 
+[Solution](https://github.com/munificent/craftinginterpreters/blob/01e6f5b8f3e5dfa65674c2f9cf4700d73ab41cf8/note/answers/chapter07_evaluating.md)
+
 ### Challenge 7.1
 
 My first intuition is that this feature should not be implemented. The reason is that many decisions have to be made about what things like `3 < "pumpkin"` will evaluate to. Those decisions are not transparent to the user and might lead to confusion. Java does not overload the comparison operators for strings and numbers (one can make use of the `Comparable` interface or `Comparator` class). JavaScript allows for comparing different types. The rules are actually not too complex.
@@ -482,7 +484,9 @@ My first intuition is that this feature should not be implemented. The reason is
 - If its the empty string the value is 0
 - After conversion the comparison can continue normally
 
-I think those rules are not too bad but also not super useful if you can instead just explicitly convert the type...
+I think those rules are not too bad but also not super useful if you can instead just explicitly convert the type...  
+
+*Comment: The solution also states that it does not make sense to compare mixed types with each other. However the solution suggests that comparing strings with each other could be useful.*
 
 ### Challenge 7.2
 
@@ -501,6 +505,8 @@ case PLUS:
     throw new RuntimeError(expr.operator, "Operands must be two numbers or two strings.");
 ```
 
+*Comment: I could replace the three new cases I added with just one case where I check if either one of the operands is a string and then use the `stringify(Object)` function to convert both operands.*
+
 ### Challenge 7.3
 
 Right now division by zero looks like this: `x / 0 = Infinity`. If this happens inside a greater term the term will still evaluate to `Infinity`. JavaScript also does it like this. Java throws an `ArithmeticException`. I think it is best to handle division by zero similar to java and terminate the program because if an expression returns `Infinity` the programmer probably did something wrong and you cannot use the value of the expression afterwards.  
@@ -515,6 +521,8 @@ case SLASH:
     }
     return (double)left / (double)right;
 ```
+
+*Comment: An interesting point is made by the solution. It is said there that not throwing an error might be better in Lox case because Lox does not offer any handling of errors/exceptions anyway so the user has no chance to tackle this error in his program.*
 
 ## Chapter 8: Statements and State
 
