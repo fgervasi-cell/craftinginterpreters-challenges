@@ -526,6 +526,8 @@ case SLASH:
 
 ## Chapter 8: Statements and State
 
+[Solution](https://github.com/munificent/craftinginterpreters/blob/01e6f5b8f3e5dfa65674c2f9cf4700d73ab41cf8/note/answers/chapter08_statements.md)
+
 ### Challenge 8.1
 
 In `Lox.runPrompt(String)` check if the line ends with a smicolon. If not it cannot be a statement so we evaluate it. To be able to parse the entered string we add the semicolon.
@@ -553,6 +555,8 @@ private static void evaluate(String source)
                         .expression.accept(new Interpreter()));
 }
 ```
+
+*Comment: The solution is a lot different and more compilcated than mine but that probably means that my solution is not the best and I overlooked something... In the solution the trick is to allow expression statements in the parser without semicolon if it is a REPL input. In `runPrompt(String)` we call a new method of the parser which sets a boolean value to true so the parser knows that an expression statement without semicolon is okay. We also change the interpreter so that it can evaluate a single expression and return its result.*
 
 ### Challenge 8.2
 
@@ -585,11 +589,15 @@ Object get(Token name)
 }
 ```
 
+*Comment: My solution is probably wrong because what happens if the user sets a variable explicitly to 'nil'? If this value is explicitly set no error should be thrown but I think my solution does it anyway. A better way to implement this is to use a custom value 'uninitialized' and check for that if a variable is accessed.*
+
 ### Challenge 8.3
 
 Expectation: First a `Stmt.Var` ist parsed. Afterwards a block will be parsed with another `Stmt.Var` inside and a `print` statement. When interpreted `a` will be assigned the value "1" in the most outer environment. Then another envoironment is opened inside of it because of the upcoming block statement. Inside this block we have another variable declaration. First the initializer is interpreted. In the initializer we refer to the `a` variable of the outer scope so the result of this expression should be "1 + 2 = 3". This value is assigned to the "new" `a` and gets printed. So the expected answer is that "3" is printed but outside of the block `a` has still the value "1". This would not be the case if we did not search for a refered variable in the most inner scope first.  
 
-Java gives an error "Duplicate local variable" in this case.
+Java gives an error "Duplicate local variable" in this case.  
+
+*Comment: Correct.*
 
 ## Chapter 9: Control Flow
 
